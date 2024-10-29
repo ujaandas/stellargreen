@@ -8,7 +8,7 @@ import NotifDropdown from "./notif-dropdown";
 
 export default async function Header() {
   return (
-    <header className="p-4 bg-gradient-to-r from-[#2c544a] to-[#222f3c] text-gray-50">
+    <header className="p-4 w-full shadow-xl bg-gradient-to-r from-[#2c544a] to-[#222f3c] text-gray-50">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <h1 className="text-xl font-bold hidden sm:inline mb-1">

@@ -11,6 +11,7 @@ import {
   IonImageryProvider,
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
+import Timelapse from "./timelapse";
 
 Ion.defaultAccessToken = process.env.NEXT_PUBLIC_CESIUM_TOKEN ?? "";
 
@@ -71,12 +72,14 @@ export default function CesiumWrapper() {
       // Load the local TIFF file
 
       (async () => {
-        // const imageryProvider = new SingleTileImageryProvider({
-        //   url: "/sample7.tif",
-        //   tileWidth: 32767,
-        //   tileHeight: 32767,
-        // });
-        const imageryLayer = await IonImageryProvider.fromAssetId(2770156);
+        /* 
+        2019: 2792821
+        2020: 2792822
+        2021: 2792823
+        2022: 2792825
+        2023: 2792827
+        */
+        const imageryLayer = await IonImageryProvider.fromAssetId(2792821);
         cesiumViewer.imageryLayers.addImageryProvider(imageryLayer);
 
         cesiumViewer.camera.flyTo({
@@ -88,37 +91,43 @@ export default function CesiumWrapper() {
   }, [cesiumViewer]);
 
   return (
-    <ResiumViewer
-      full
-      ref={(element) => {
-        if (element?.cesiumElement && !cesiumViewer) {
-          setCesiumViewer(element.cesiumElement);
-        }
-      }}
-      timeline={false}
-      animation={false}
-      // baseLayerPicker={false}
-      geocoder={false}
-      homeButton={false}
-      sceneModePicker={false}
-      navigationHelpButton={false}
-      infoBox={false}
-      selectionIndicator={false}
-    >
-      {cameraState && (
-        <CameraFlyTo
-          destination={Cartesian3.fromRadians(
-            cameraState.position.longitude,
-            cameraState.position.latitude,
-            cameraState.position.height
-          )}
-          orientation={{
-            heading: CesiumMath.toRadians(cameraState.heading),
-            pitch: CesiumMath.toRadians(cameraState.pitch),
-            roll: CesiumMath.toRadians(cameraState.roll),
-          }}
-        />
-      )}
-    </ResiumViewer>
+    <>
+      <ResiumViewer
+        ref={(element) => {
+          if (element?.cesiumElement && !cesiumViewer) {
+            setCesiumViewer(element.cesiumElement);
+          }
+        }}
+        full={false}
+        timeline={false}
+        animation={false}
+        // baseLayerPicker={false}
+        geocoder={false}
+        homeButton={false}
+        sceneModePicker={false}
+        navigationHelpButton={false}
+        infoBox={false}
+        selectionIndicator={false}
+        className="w-full h-full"
+      >
+        {cameraState && (
+          <CameraFlyTo
+            destination={Cartesian3.fromRadians(
+              cameraState.position.longitude,
+              cameraState.position.latitude,
+              cameraState.position.height
+            )}
+            orientation={{
+              heading: CesiumMath.toRadians(cameraState.heading),
+              pitch: CesiumMath.toRadians(cameraState.pitch),
+              roll: CesiumMath.toRadians(cameraState.roll),
+            }}
+          />
+        )}
+      </ResiumViewer>
+      <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
+        <Timelapse />
+      </div>
+    </>
   );
 }

@@ -1,19 +1,39 @@
 import Titlebar from "@/components/titlebar";
-// import CesiumWrapper from "../components/cesium-wrapper";
 import Sidebar from "@/components/sidebar";
-import CesiumWrapper2 from "@/components/cesium-wrapper-2";
+import CesiumWrapper from "@/components/cesium-wrapper";
+import RoundedBlock from "@/components/rounded-block";
+import SidebarInfo from "@/components/sidebar-info";
 
 export default async function Home() {
+  const isSidebarInfoVisible = true;
+
   return (
-    <div className="relative w-full h-screen">
-      <div className="absolute top-0 left-0 w-full">
+    <div className="flex flex-row bg-[#17252b] h-screen w-screen">
+      <Sidebar />
+      <div className="flex flex-col flex-grow">
         <Titlebar />
-      </div>
-      <div className="absolute top-16 left-0 w-full h-[calc(100%-4rem)]">
-        <CesiumWrapper2 />
-      </div>
-      <div className="absolute top-16 left-0 h-[calc(100%-4rem)] bg-gray-800 z-10">
-        <Sidebar />
+        <div
+          className={`flex flex-row flex-grow transition-all duration-300 ${
+            isSidebarInfoVisible ? "" : "justify-center"
+          }`}
+        >
+          {isSidebarInfoVisible && (
+            <div className="flex-none w-80 border-transparent border-l-[16px]">
+              <RoundedBlock>
+                <SidebarInfo />
+              </RoundedBlock>
+            </div>
+          )}
+          <div
+            className={`flex-grow border-transparent border-l-[16px] border-r-[16px] ${
+              isSidebarInfoVisible ? "" : "w-full"
+            }`}
+          >
+            <RoundedBlock>
+              <CesiumWrapper />
+            </RoundedBlock>
+          </div>
+        </div>
       </div>
     </div>
   );
