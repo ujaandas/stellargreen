@@ -102,9 +102,9 @@ export default function CesiumWrapper() {
     <div className="relative w-full h-full">
       {loading && (
         <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <Skeleton className="w-full h-full" />{" "}
+          <Skeleton className="w-full h-full bg-muted/15" />
         </div>
-      )}{" "}
+      )}
       <ResiumViewer
         ref={(element) => {
           if (element?.cesiumElement && !cesiumViewer) {
