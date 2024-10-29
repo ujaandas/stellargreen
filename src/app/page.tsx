@@ -1,8 +1,8 @@
-import Titlebar from "@/components/titlebar";
-import Sidebar from "@/components/sidebar";
-import CesiumWrapper from "@/components/cesium-wrapper";
+import CesiumWrapper from "@/components/cesium/cesium-wrapper";
 import RoundedBlock from "@/components/rounded-block";
-import SidebarInfo from "@/components/sidebar-info";
+import Sidebar from "@/components/sidebar/sidebar";
+import SidebarInfo from "@/components/sidebar/sidebar-info";
+import Titlebar from "@/components/titlebar/titlebar";
 
 export default async function Home() {
   const isSidebarInfoVisible = true;
