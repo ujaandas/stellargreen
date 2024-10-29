@@ -12,6 +12,7 @@ import {
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import Timelapse from "./timelapse";
+import { Skeleton } from "@/components/ui/skeleton";
 
 Ion.defaultAccessToken = process.env.NEXT_PUBLIC_CESIUM_TOKEN ?? "";
 
@@ -23,6 +24,7 @@ type CesiumCameraState = {
 };
 
 export default function CesiumWrapper() {
+  const [loading, setLoading] = useState(true);
   const [cesiumViewer, setCesiumViewer] = useState<CesiumViewer | null>(null);
   const [cameraState, setCameraState] = useState<CesiumCameraState | null>(
     null
@@ -90,8 +92,19 @@ export default function CesiumWrapper() {
     }
   }, [cesiumViewer]);
 
+  useEffect(() => {
+    if (cesiumViewer) {
+      setLoading(false);
+    }
+  }, [cesiumViewer]);
+
   return (
-    <>
+    <div className="relative w-full h-full">
+      {loading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <Skeleton className="w-full h-full" />{" "}
+        </div>
+      )}{" "}
       <ResiumViewer
         ref={(element) => {
           if (element?.cesiumElement && !cesiumViewer) {
@@ -101,7 +114,6 @@ export default function CesiumWrapper() {
         full={false}
         timeline={false}
         animation={false}
-        // baseLayerPicker={false}
         geocoder={false}
         homeButton={false}
         sceneModePicker={false}
@@ -128,6 +140,6 @@ export default function CesiumWrapper() {
       <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
         <Timelapse />
       </div>
-    </>
+    </div>
   );
 }
