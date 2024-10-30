@@ -1,11 +1,13 @@
 "use client";
 
-import useStore, { menuItems } from "@/stores/menu-item";
+import useMenuStore, { menuItems } from "@/stores/menu-item";
 import SidebarMenuButton from "./sidebar-menu-button";
 
 export default function Sidebar() {
-  const selectedMenuItem = useStore((state) => state.selectedMenuItem);
-  const setSelectedMenuItem = useStore((state) => state.setSelectedMenuItem);
+  const selectedMenuItem = useMenuStore((state) => state.selectedMenuItem);
+  const setSelectedMenuItem = useMenuStore(
+    (state) => state.setSelectedMenuItem
+  );
 
   const handleSidebarButtonClick = (selectedItem: string) => {
     if (selectedItem !== selectedMenuItem) {

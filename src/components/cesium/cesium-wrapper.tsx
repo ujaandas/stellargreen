@@ -11,10 +11,20 @@ import {
   IonImageryProvider,
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import Timelapse from "./timelapse";
+import TimelapseButton from "./timelapse/timelapse-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import Timelapse from "./timelapse/timelapse";
+import useYearStore from "@/stores/timelapse-year";
 
 Ion.defaultAccessToken = process.env.NEXT_PUBLIC_CESIUM_TOKEN ?? "";
+
+export const cesiumIonYearMapping: { [key: number]: number } = {
+  2019: 2792821,
+  2020: 2792822,
+  2021: 2792823,
+  2022: 2792825,
+  2023: 2792827,
+};
 
 type CesiumCameraState = {
   position: Cartographic;
@@ -29,6 +39,12 @@ export default function CesiumWrapper() {
   const [cameraState, setCameraState] = useState<CesiumCameraState | null>(
     null
   );
+  const [isTimelapseOpen, setIsTimelapseOpen] = useState(false);
+  const selectedYear = useYearStore((state) => state.selectedYear);
+
+  const handleTimelapseBtnClick = () => {
+    setIsTimelapseOpen(!isTimelapseOpen);
+  };
 
   const handleCameraChange = useCallback(() => {
     if (cesiumViewer) {
@@ -74,14 +90,9 @@ export default function CesiumWrapper() {
       // Load the local TIFF file
 
       (async () => {
-        /* 
-        2019: 2792821
-        2020: 2792822
-        2021: 2792823
-        2022: 2792825
-        2023: 2792827
-        */
-        const imageryLayer = await IonImageryProvider.fromAssetId(2792821);
+        const imageryLayer = await IonImageryProvider.fromAssetId(
+          cesiumIonYearMapping[selectedYear]
+        );
         cesiumViewer.imageryLayers.addImageryProvider(imageryLayer);
 
         cesiumViewer.camera.flyTo({
@@ -90,7 +101,7 @@ export default function CesiumWrapper() {
         console.log("flying to", imageryLayer.rectangle);
       })();
     }
-  }, [cesiumViewer]);
+  }, [cesiumViewer, selectedYear]);
 
   useEffect(() => {
     if (cesiumViewer) {
@@ -138,7 +149,11 @@ export default function CesiumWrapper() {
         )}
       </ResiumViewer>
       <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-        <Timelapse />
+        {isTimelapseOpen && <Timelapse />}
+        <TimelapseButton
+          isTimelapseOpen={isTimelapseOpen}
+          setIsTimelapseOpen={() => handleTimelapseBtnClick()}
+        />
       </div>
     </div>
   );

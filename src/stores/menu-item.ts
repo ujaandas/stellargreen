@@ -14,9 +14,9 @@ interface MenuStoreState {
   setSelectedMenuItem: (item: string) => void;
 }
 
-const useStore = create<MenuStoreState>((set) => ({
+const useMenuStore = create<MenuStoreState>((set) => ({
   selectedMenuItem: menuItems[0].label,
   setSelectedMenuItem: (item) => set({ selectedMenuItem: item }),
 }));
 
-export default useStore;
+export default useMenuStore;
