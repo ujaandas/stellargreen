@@ -1,19 +1,29 @@
 import { GeoJsonDataSource } from "resium";
-import { Color } from "cesium";
-import useGeoJsonData from "@/hooks/useGeoJsonData";
+import { Color, Viewer as CesiumViewer } from "cesium";
+import useFetchGeojson from "@/hooks/useFetchGeojson";
 
-const ResiumGeoJsonLoader = () => {
-  const { geoJsonData } = useGeoJsonData();
+interface ResiumGeoJsonLoaderProps {
+  cesiumViewer: CesiumViewer | null;
+}
+
+const ResiumGeoJsonLoader = ({ cesiumViewer }: ResiumGeoJsonLoaderProps) => {
+  const geoJsons = useFetchGeojson(
+    ["HK_shapefile.zip", "Junshan_shapefile.zip", "Bhutan_shapefile.zip"],
+    cesiumViewer
+  );
 
   return (
-    geoJsonData && (
-      <GeoJsonDataSource
-        data={geoJsonData}
-        stroke={Color.WHITE}
-        fill={Color.WHITE.withAlpha(0.5)}
-        strokeWidth={2}
-      />
-    )
+    <>
+      {geoJsons.map((geoJson, index) => (
+        <GeoJsonDataSource
+          key={index}
+          data={geoJson}
+          markerColor={Color.RED}
+          stroke={Color.WHITE}
+          fill={Color.WHITE.withAlpha(0.5)}
+        />
+      ))}
+    </>
   );
 };
 

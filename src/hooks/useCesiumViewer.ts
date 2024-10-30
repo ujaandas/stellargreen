@@ -27,7 +27,6 @@ export default function useCesiumViewer() {
     if (cesiumViewer) {
       console.log("cesiumViewer initialized", cesiumViewer);
 
-      // Load the imagery layer
       loadImageryLayer(cesiumViewer, selectedYear);
     }
   }, [cesiumViewer, selectedYear]);
