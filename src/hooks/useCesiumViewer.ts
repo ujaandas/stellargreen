@@ -6,30 +6,34 @@ import useYearStore from "@/stores/timelapse-year";
 // Load the local TIFF file
 const loadImageryLayer = async (
   cesiumViewer: CesiumViewer,
-  selectedYear: number
+  selectedYear: number,
+  firstLoad: boolean
 ) => {
   const imageryLayer = await IonImageryProvider.fromAssetId(
     cesiumIonYearMapping[selectedYear]
   );
   cesiumViewer.imageryLayers.addImageryProvider(imageryLayer);
 
-  cesiumViewer.camera.flyTo({
-    destination: imageryLayer.rectangle,
-  });
-  console.log("flying to", imageryLayer.rectangle);
+  if (firstLoad) {
+    cesiumViewer.camera.flyTo({
+      destination: imageryLayer.rectangle,
+    });
+    console.log("flying to", imageryLayer.rectangle);
+  }
 };
 
 export default function useCesiumViewer() {
   const [cesiumViewer, setCesiumViewer] = useState<CesiumViewer | null>(null);
+  const [firstLoad, setFirstLoad] = useState(true);
   const selectedYear = useYearStore((state) => state.selectedYear);
 
   useEffect(() => {
     if (cesiumViewer) {
       console.log("cesiumViewer initialized", cesiumViewer);
-
-      loadImageryLayer(cesiumViewer, selectedYear);
+      loadImageryLayer(cesiumViewer, selectedYear, firstLoad);
+      setFirstLoad(false);
     }
-  }, [cesiumViewer, selectedYear]);
+  }, [cesiumViewer, firstLoad, selectedYear]);
 
   return { cesiumViewer, setCesiumViewer };
 }
