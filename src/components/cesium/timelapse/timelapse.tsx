@@ -1,8 +1,8 @@
 "use client";
 
 import { Slider } from "@/components/ui/slider";
+import { cesiumIonYearMapping } from "@/lib/cesiumIonYearMapping";
 import useYearStore from "@/stores/timelapse-year";
-import { cesiumIonYearMapping } from "../cesium-wrapper";
 
 export default function Timelapse() {
   const years = cesiumIonYearMapping

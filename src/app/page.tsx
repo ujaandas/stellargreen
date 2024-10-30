@@ -1,4 +1,4 @@
-import CesiumWrapper from "@/components/cesium/cesium-wrapper";
+import ResiumWrapper from "@/components/cesium/resium-wrapper";
 import RoundedBlock from "@/components/rounded-block";
 import Sidebar from "@/components/sidebar/sidebar";
 import SidebarInfo from "@/components/sidebar/sidebar-info";
@@ -30,7 +30,7 @@ export default async function Home() {
             }`}
           >
             <RoundedBlock>
-              <CesiumWrapper />
+              <ResiumWrapper />
             </RoundedBlock>
           </div>
         </div>

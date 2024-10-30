@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import { Math as CesiumMath, Cartographic, Viewer } from "cesium";
+import {
+  Cartographic,
+  Math as CesiumMath,
+  Viewer as CesiumViewer,
+} from "cesium";
 
 type CesiumCameraState = {
   position: Cartographic;
@@ -8,7 +12,7 @@ type CesiumCameraState = {
   roll: number;
 };
 
-export default function useCameraState(cesiumViewer: Viewer | null) {
+export default function useCameraState(cesiumViewer: CesiumViewer | null) {
   const [cameraState, setCameraState] = useState<CesiumCameraState | null>(
     null
   );
@@ -30,19 +34,13 @@ export default function useCameraState(cesiumViewer: Viewer | null) {
   useEffect(() => {
     if (cesiumViewer) {
       const camera = cesiumViewer.scene.camera;
-
-      const onMoveStart = () => {
-        console.log("Camera started moving");
-      };
-
+      const onMoveStart = () => console.log("Camera started moving");
       const onMoveEnd = () => {
         handleCameraChange();
         console.log("Camera stopped moving");
       };
-
       camera.moveStart.addEventListener(onMoveStart);
       camera.moveEnd.addEventListener(onMoveEnd);
-
       return () => {
         camera.moveStart.removeEventListener(onMoveStart);
         camera.moveEnd.removeEventListener(onMoveEnd);
@@ -50,5 +48,5 @@ export default function useCameraState(cesiumViewer: Viewer | null) {
     }
   }, [cesiumViewer, handleCameraChange]);
 
-  return cameraState;
+  return { cameraState, handleCameraChange };
 }
