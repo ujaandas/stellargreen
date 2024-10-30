@@ -14,6 +14,8 @@
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.1",
+    "@types/shapefile": "^0.6.4",
+    "@types/shpjs": "^3.4.7",
     "cesium": "^1.122.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -23,12 +25,14 @@
     "react": "^18",
     "react-dom": "^18",
     "resium": "^1.18.2",
+    "shpjs": "^6.1.0",
     "tailwind-merge": "^2.5.3",
     "tailwindcss-animate": "^1.0.7",
     "webpack": "^5.95.0",
     "zustand": "^5.0.0"
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.14",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

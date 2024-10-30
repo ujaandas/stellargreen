@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { Viewer as ResiumViewer, CameraFlyTo } from "resium";
+import { Viewer as ResiumViewer, CameraFlyTo, GeoJsonDataSource } from "resium";
 import {
   Ion,
   Viewer as CesiumViewer,
@@ -9,12 +9,15 @@ import {
   Cartesian3,
   Cartographic,
   IonImageryProvider,
+  Color,
 } from "cesium";
 import "cesium/Build/Cesium/Widgets/widgets.css";
 import TimelapseButton from "./timelapse/timelapse-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Timelapse from "./timelapse/timelapse";
 import useYearStore from "@/stores/timelapse-year";
+import shp from "shpjs";
+import { FeatureCollection } from "geojson";
 
 Ion.defaultAccessToken = process.env.NEXT_PUBLIC_CESIUM_TOKEN ?? "";
 
@@ -40,11 +43,30 @@ export default function CesiumWrapper() {
     null
   );
   const [isTimelapseOpen, setIsTimelapseOpen] = useState(false);
+  const [geoJsonData, setGeoJsonData] = useState<FeatureCollection | null>(
+    null
+  );
   const selectedYear = useYearStore((state) => state.selectedYear);
 
   const handleTimelapseBtnClick = () => {
     setIsTimelapseOpen(!isTimelapseOpen);
   };
+
+  useEffect(() => {
+    const loadShapefile = async () => {
+      try {
+        const response = await fetch("/HK_shapefile.zip");
+        if (!response.ok) throw new Error("Failed to fetch shapefile.");
+        const buffer = await response.arrayBuffer();
+        const geojson = await shp(buffer);
+        console.log(geojson);
+        setGeoJsonData(geojson as FeatureCollection);
+      } catch (error) {
+        console.error("Error loading shapefile:", error);
+      }
+    };
+    loadShapefile();
+  }, []);
 
   const handleCameraChange = useCallback(() => {
     if (cesiumViewer) {
@@ -88,12 +110,11 @@ export default function CesiumWrapper() {
       console.log("cesiumViewer", cesiumViewer);
 
       // Load the local TIFF file
-
       (async () => {
         const imageryLayer = await IonImageryProvider.fromAssetId(
           cesiumIonYearMapping[selectedYear]
         );
-        cesiumViewer.imageryLayers.addImageryProvider(imageryLayer);
+        // cesiumViewer.imageryLayers.addImageryProvider(imageryLayer);
 
         cesiumViewer.camera.flyTo({
           destination: imageryLayer.rectangle,
@@ -145,6 +166,14 @@ export default function CesiumWrapper() {
               pitch: CesiumMath.toRadians(cameraState.pitch),
               roll: CesiumMath.toRadians(cameraState.roll),
             }}
+          />
+        )}
+        {geoJsonData && (
+          <GeoJsonDataSource
+            data={geoJsonData}
+            stroke={Color.WHITE}
+            fill={Color.WHITE.withAlpha(0.5)}
+            strokeWidth={2}
           />
         )}
       </ResiumViewer>
