@@ -31,12 +31,13 @@ export default function ResiumWrapper() {
             const id = pickedObject.id;
             if (id && id.properties) {
               const properties = id.properties.getValue();
-              console.log("Clicked feature properties:", {
-                Name: properties.Name,
-                Description: properties.descriptio,
-                Area: properties.Shape_Area,
-                Length: properties.Shape_Leng,
-              });
+              console.log(properties);
+              // console.log("Clicked feature properties:", {
+              //   Name: properties.Name,
+              //   Description: properties.descriptio,
+              //   Area: properties.Shape_Area,
+              //   Length: properties.Shape_Leng,
+              // });
             }
           }
         },
@@ -67,6 +68,7 @@ export default function ResiumWrapper() {
         navigationHelpButton={false}
         infoBox={false}
         selectionIndicator={false}
+        // creditContainer={document.createElement("none")} (against TOS, dont do this)
         className="w-full h-full"
       >
         <ResiumCamera cesiumViewer={cesiumViewer} />
