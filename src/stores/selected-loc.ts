@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const locations = ["Hong Kong", "Junshan", "Bhutan", "Kadoorie"];
+export const locations = ["hong_kong", "junshan", "bhutan", "kadoorie"];
 
 interface SelectedLocationStoreState {
   selectedLocation: string | null;
@@ -8,7 +8,7 @@ interface SelectedLocationStoreState {
 }
 
 const useSelectedLocationStore = create<SelectedLocationStoreState>((set) => ({
-  selectedLocation: locations[0],
+  selectedLocation: locations[3],
   setSelectedLocation: (location) => set({ selectedLocation: location }),
 }));
 

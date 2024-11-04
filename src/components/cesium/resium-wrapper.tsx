@@ -24,13 +24,13 @@ export default function ResiumWrapper() {
     (properties: { [key: string]: unknown }) => {
       if (properties && properties["NAME_1"] == "Hong Kong") {
         console.log("Selected Hong Kong");
-        setSelectedLocation("Hong Kong");
+        setSelectedLocation("hong_kong");
       } else if (properties && properties["DI_MAO"] == 5) {
         console.log("Selected Junshan");
-        setSelectedLocation("Junshan");
+        setSelectedLocation("junshan");
       } else if (properties && properties["COUNTRY"] == "Bhutan") {
         console.log("Selected Bhutan");
-        setSelectedLocation("Bhutan");
+        setSelectedLocation("bhutan");
       }
     },
     [setSelectedLocation]
