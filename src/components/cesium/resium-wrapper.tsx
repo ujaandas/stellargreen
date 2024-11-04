@@ -1,7 +1,7 @@
 "use client";
 
 import "cesium/Build/Cesium/Widgets/widgets.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Viewer as ResiumViewer } from "resium";
 import { Cartesian2, defined, Ion, ScreenSpaceEventType } from "cesium";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -9,12 +9,32 @@ import useCesiumViewer from "@/hooks/useCesiumViewer";
 import ResiumCamera from "./resium-camera";
 import ResiumGeoJsonLoader from "./resium-geojson-loader";
 import TimelapseWrapper from "./timelapse/timelapse-wrapper";
+import useSelectedLocationStore from "@/stores/selected-loc";
 
 Ion.defaultAccessToken = process.env.NEXT_PUBLIC_CESIUM_TOKEN ?? "";
 
 export default function ResiumWrapper() {
   const [loading, setLoading] = useState(true);
   const { cesiumViewer, setCesiumViewer } = useCesiumViewer();
+  const setSelectedLocation = useSelectedLocationStore(
+    (state) => state.setSelectedLocation
+  );
+
+  const handleJankyClick = useCallback(
+    (properties: { [key: string]: unknown }) => {
+      if (properties && properties["NAME_1"] == "Hong Kong") {
+        console.log("Selected Hong Kong");
+        setSelectedLocation("Hong Kong");
+      } else if (properties && properties["DI_MAO"] == 5) {
+        console.log("Selected Junshan");
+        setSelectedLocation("Junshan");
+      } else if (properties && properties["COUNTRY"] == "Bhutan") {
+        console.log("Selected Bhutan");
+        setSelectedLocation("Bhutan");
+      }
+    },
+    [setSelectedLocation]
+  );
 
   useEffect(() => {
     if (cesiumViewer) {
@@ -32,19 +52,14 @@ export default function ResiumWrapper() {
             if (id && id.properties) {
               const properties = id.properties.getValue();
               console.log(properties);
-              // console.log("Clicked feature properties:", {
-              //   Name: properties.Name,
-              //   Description: properties.descriptio,
-              //   Area: properties.Shape_Area,
-              //   Length: properties.Shape_Leng,
-              // });
+              handleJankyClick(properties);
             }
           }
         },
         ScreenSpaceEventType.LEFT_CLICK
       );
     }
-  }, [cesiumViewer]);
+  }, [cesiumViewer, handleJankyClick]);
 
   return (
     <div className="relative w-full h-full">
